@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import lombok.*;
 import notehospital.enums.OrderStatus;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Set;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "orders")
+@Component
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +37,16 @@ public class Order {
     @JoinColumn(name = "doctor_id")
     private Account doctor;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "prescription_id")
-    private Prescription prescription;
+    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<PrescriptionItem> prescriptionItems;
+
 
     @OneToMany(mappedBy = "order",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Result> results;
+
+    @ManyToOne()
+    @JoinColumn(name = "facilityod_id")
+    @JsonIgnore
+    Facility facilityod;
 }

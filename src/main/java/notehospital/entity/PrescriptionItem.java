@@ -25,11 +25,16 @@ public class PrescriptionItem {
 
     private boolean isDeleted = false;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "prescription_id")
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "prescription_id")
+//
+//    Prescription prescription;
 
-    Prescription prescription;
+    @ManyToOne()
+    @JoinColumn(name = "order_id")
+    @JsonIgnore
+    Order order;
 
     @ManyToOne
     @JoinColumn(name = "medicine_id")

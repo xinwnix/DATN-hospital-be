@@ -22,10 +22,22 @@ public class Service {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
+    @Lob
+    private String image;
     private String name;
+    private String price;
     private String description;
 
     @OneToMany(mappedBy = "service",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Result> results;
+
+    @OneToMany(mappedBy = "service")
+    @JsonIgnore
+    private Set<Account> accounts;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "facilityac_id")
+    @JsonProperty("facility")
+    private Facility facilitysv;
 }

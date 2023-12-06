@@ -11,10 +11,8 @@ import notehospital.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -30,9 +28,6 @@ public class OrderService {
 
     @Autowired
     OrderRepository orderRepository;
-
-    @Autowired
-    PrescriptionRepository prescriptionRepository;
 
     @Autowired
     PrescriptionItemRepository prescriptionItemRepository;
@@ -61,6 +56,13 @@ public class OrderService {
         order.setDoctor(doctor);
         order.setResults(results);
         return orderRepository.save(order);
+    }
+
+    public void deleteOrderById(Long orderId) {
+        Order order = orderRepository.findOrderByIdAndStatus(orderId);
+        if (order != null) {
+            orderRepository.delete(order);
+        }
     }
 
     public List<Order> getOrderHistory(long userId) {
@@ -94,22 +96,22 @@ public class OrderService {
     public Order createPrescription(long orderId, CreatePrescriptionRequest createPrescriptionRequest) {
         Order order = orderRepository.findOrderById(orderId);
 
-        if(order.getPrescription() == null){
-            Prescription prescription = new Prescription();
-            prescription.setOrder(order);
-            prescription = prescriptionRepository.save(prescription);
-            order.setPrescription(prescription);
-            order = orderRepository.save(order);
-        }
+//        if(order.getPrescription() == null){
+//            Prescription prescription = new Prescription();
+////            prescription.setOrder(order);
+//            prescription = prescriptionRepository.save(prescription);
+//            order.setPrescription(prescription);
+//            order = orderRepository.save(order);
+//        }
 
-        if (order.getPrescription() != null && order.getPrescription().getPrescriptionItems() != null &&
-                order.getPrescription().getPrescriptionItems().size() > 0
-        ) {
-            for(PrescriptionItem prescriptionItem: order.getPrescription().getPrescriptionItems()){
-                prescriptionItem.setDeleted(true);
-                prescriptionItemRepository.save(prescriptionItem);
-            }
-        }
+//        if (order.getPrescription() != null && order.getPrescription().getPrescriptionItems() != null &&
+//                order.getPrescription().getPrescriptionItems().size() > 0
+//        ) {
+//            for(PrescriptionItem prescriptionItem: order.getPrescription().getPrescriptionItems()){
+//                prescriptionItem.setDeleted(true);
+//                prescriptionItemRepository.save(prescriptionItem);
+//            }
+//        }
 
         for (PrescriptionItemRequest prescriptionItem : createPrescriptionRequest.getPrescriptionItems()) {
             Medicine medicine = medicineRepository.findMedicineById(prescriptionItem.getMedicineId());
@@ -117,10 +119,9 @@ public class OrderService {
             newItem.setTimes(prescriptionItem.getTimes());
             newItem.setQuantity(prescriptionItem.getQuantity());
             newItem.setMedicine(medicine);
-            newItem.setPrescription(order.getPrescription());
+            newItem.setOrder(order);
             prescriptionItemRepository.save(newItem);
         }
-
         Order newOrder = orderRepository.findOrderById(orderId);
         return newOrder;
     }
@@ -133,7 +134,6 @@ public class OrderService {
             result1.setComment(result.getComment());
             resultRepository.save(result1);
         }
-
         return orderRepository.findOrderById(orderId);
     }
 
@@ -141,4 +141,6 @@ public class OrderService {
         List<Result> results = resultRepository.getHealthRecord(userId);
         return results;
     }
+
+
 }

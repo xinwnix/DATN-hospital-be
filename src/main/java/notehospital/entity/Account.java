@@ -57,6 +57,11 @@ public class Account implements UserDetails {
     @JsonIgnore
     private Set<Order> doctorSchedule;
 
+    @ManyToOne()
+    @JoinColumn(name = "Service_id")
+    @JsonIgnore
+    Service service;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

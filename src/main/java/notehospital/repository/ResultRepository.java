@@ -11,4 +11,5 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
 
     @Query("SELECT r FROM Result r JOIN r.order o JOIN o.patient p WHERE p.id = ?1 AND o.status='DONE'")
     List<Result> getHealthRecord(long userId);
+
 }

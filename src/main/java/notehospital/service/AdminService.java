@@ -3,6 +3,7 @@ package notehospital.service;
 import notehospital.dto.request.MedicineRequest;
 import notehospital.dto.request.ServiceRequest;
 import notehospital.dto.response.AccountResponseDTO;
+import notehospital.dto.response.ServiceResponse;
 import notehospital.entity.Account;
 import notehospital.entity.Medicine;
 import notehospital.repository.AccountRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -37,7 +39,7 @@ public class AdminService {
     }
 
     public List<notehospital.entity.Service> getAllService(){
-        List<notehospital.entity.Service> services = serviceRepository.findAll();
+        List<notehospital.entity.Service> services = serviceRepository.findAllServicesWithFacilityAndDoctors();
         return services;
     }
 
@@ -58,4 +60,6 @@ public class AdminService {
     public void deleteMedicine(long medicineId){
         medicineRepository.deleteById(medicineId);
     }
+
+
 }
