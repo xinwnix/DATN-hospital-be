@@ -3,6 +3,7 @@ package notehospital.dto.response;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import lombok.Data;
+import notehospital.entity.Service;
 import notehospital.enums.AccountStatus;
 import notehospital.enums.AccountType;
 import notehospital.enums.Gender;
@@ -17,7 +18,6 @@ public class AccountResponseDTO {
     private String email;
     private Gender gender;
     private String address;
-    private String avatarURL;
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
@@ -25,4 +25,6 @@ public class AccountResponseDTO {
 
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
+
+    private notehospital.entity.Service service;
 }

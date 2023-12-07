@@ -1,4 +1,4 @@
-package notehospital.service;
+package notehospital.entity.service;
 
 import notehospital.dto.request.CreatePrescriptionRequest;
 import notehospital.dto.request.OrderRequest;

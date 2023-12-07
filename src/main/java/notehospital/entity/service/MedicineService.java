@@ -1,4 +1,4 @@
-package notehospital.service;
+package notehospital.entity.service;
 
 import notehospital.entity.Medicine;
 import notehospital.repository.MedicineRepository;

@@ -1,4 +1,4 @@
-package notehospital.service;
+package notehospital.entity.service;
 
 import notehospital.dto.EmailDetail;
 import org.springframework.beans.factory.annotation.Autowired;

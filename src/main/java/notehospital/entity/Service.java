@@ -9,6 +9,8 @@ import lombok.Setter;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,7 +34,7 @@ public class Service {
     @JsonIgnore
     private Set<Result> results;
 
-    @OneToMany(mappedBy = "service")
+    @OneToMany(mappedBy = "serviceac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Account> accounts;
 

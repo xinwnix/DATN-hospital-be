@@ -4,6 +4,7 @@ package notehospital.entity;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +42,6 @@ public class Account implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus = AccountStatus.INACTIVE;
     private String address;
-    private String avatarURL;
     private LocalDate dateOfBirth;
     private String code;
 
@@ -57,10 +57,10 @@ public class Account implements UserDetails {
     @JsonIgnore
     private Set<Order> doctorSchedule;
 
-    @ManyToOne()
-    @JoinColumn(name = "Service_id")
-    @JsonIgnore
-    Service service;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_id")
+    @JsonProperty("service")
+    private Service serviceac;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -4,12 +4,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import notehospital.dto.request.MedicineRequest;
 import notehospital.dto.request.ServiceRequest;
 import notehospital.dto.response.AccountResponseDTO;
-import notehospital.dto.response.ServiceResponse;
 import notehospital.entity.Medicine;
 import notehospital.entity.Service;
-import notehospital.service.AccountService;
-import notehospital.service.AdminService;
-import notehospital.service.MedicineService;
+import notehospital.entity.service.AdminService;
+import notehospital.entity.service.MedicineService;
 import notehospital.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +31,18 @@ public class AdminController {
     @GetMapping("/accounts")
     public ResponseEntity getAllAccount() {
         List<AccountResponseDTO> accountResponseDTOList = adminService.getAllAccount();
+        return responseHandler.response(200, "Successfully get all account!", accountResponseDTOList);
+    }
+
+    @GetMapping("/accounts/patient")
+    public ResponseEntity getAccountPatient() {
+        List<AccountResponseDTO> accountResponseDTOList = adminService.getAccountPatient();
+        return responseHandler.response(200, "Successfully get all account!", accountResponseDTOList);
+    }
+
+    @GetMapping("/accounts/doctor")
+    public ResponseEntity getAccountDoctor() {
+        List<AccountResponseDTO> accountResponseDTOList = adminService.getAccountDoctor();
         return responseHandler.response(200, "Successfully get all account!", accountResponseDTOList);
     }
 

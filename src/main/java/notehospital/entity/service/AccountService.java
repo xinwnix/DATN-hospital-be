@@ -1,4 +1,4 @@
-package notehospital.service;
+package notehospital.entity.service;
 
 import notehospital.dto.EmailDetail;
 import notehospital.dto.request.*;
@@ -8,7 +8,6 @@ import notehospital.entity.Account;
 import notehospital.entity.Facility;
 import notehospital.enums.AccountStatus;
 import notehospital.enums.AccountType;
-import notehospital.enums.Gender;
 import notehospital.exception.exception.BadRequest;
 import notehospital.exception.exception.EntityNotFound;
 import notehospital.repository.AccountRepository;

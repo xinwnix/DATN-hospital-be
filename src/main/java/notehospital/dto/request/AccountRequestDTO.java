@@ -37,8 +37,6 @@ public class AccountRequestDTO {
     @NotBlank(message = "Address is required")
     private String address;
 
-    private String avatarURL;
-
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
@@ -47,4 +45,6 @@ public class AccountRequestDTO {
 
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
+
+    private long service_id;
 }

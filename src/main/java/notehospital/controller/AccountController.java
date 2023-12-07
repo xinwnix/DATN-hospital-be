@@ -6,15 +6,13 @@ import javax.validation.Valid;
 
 import notehospital.dto.request.*;
 import notehospital.dto.response.AccountResponseDTO;
-import notehospital.dto.response.FacilityResponse;
 import notehospital.dto.response.ResponseDTO;
 import notehospital.entity.Account;
 import notehospital.entity.Facility;
-import notehospital.entity.Medicine;
 import notehospital.enums.AccountStatus;
 import notehospital.exception.exception.BadRequest;
-import notehospital.service.AccountService;
-import notehospital.service.MedicineService;
+import notehospital.entity.service.AccountService;
+import notehospital.entity.service.MedicineService;
 import notehospital.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

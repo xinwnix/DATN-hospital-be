@@ -1,4 +1,4 @@
-package notehospital.service;
+package notehospital.entity.service;
 
 import notehospital.dto.request.MedicineRequest;
 import notehospital.dto.request.ServiceRequest;
@@ -6,6 +6,7 @@ import notehospital.dto.response.AccountResponseDTO;
 import notehospital.dto.response.ServiceResponse;
 import notehospital.entity.Account;
 import notehospital.entity.Medicine;
+import notehospital.enums.AccountType;
 import notehospital.repository.AccountRepository;
 import notehospital.repository.MedicineRepository;
 import notehospital.repository.ServiceRepository;
@@ -38,8 +39,29 @@ public class AdminService {
         return accountResponseDTOS;
     }
 
+
+    public List<AccountResponseDTO> getAccountPatient(){
+        List<Account> accounts = accountRepository.findPatients();
+        List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
+        for(Account account: accounts){
+            accountResponseDTOS.add(modelMapper.map(account, AccountResponseDTO.class));
+        }
+        return accountResponseDTOS;
+    }
+    public List<AccountResponseDTO> getAccountDoctor(){
+        List<Account> accounts = accountRepository.findDoctors();
+//        List<Account> accounts = accountRepository.findAccountsByType(AccountType.DOCTOR);
+
+        List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
+        for(Account account: accounts){
+            accountResponseDTOS.add(modelMapper.map(account, AccountResponseDTO.class));
+        }
+        return accountResponseDTOS;
+    }
+
+
     public List<notehospital.entity.Service> getAllService(){
-        List<notehospital.entity.Service> services = serviceRepository.findAllServicesWithFacilityAndDoctors();
+        List<notehospital.entity.Service> services = serviceRepository.findAllServicesWithFacility();
         return services;
     }
 

@@ -6,17 +6,15 @@ import notehospital.dto.request.OrderRequest;
 import notehospital.dto.request.ResultRequest;
 import notehospital.entity.Order;
 //import notehospital.entity.Prescription;
-import notehospital.entity.PrescriptionItem;
 import notehospital.entity.Result;
 import notehospital.enums.OrderStatus;
-import notehospital.service.OrderService;
+import notehospital.entity.service.OrderService;
 import notehospital.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @SecurityRequirement(name = "api")

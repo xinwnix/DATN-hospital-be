@@ -4,8 +4,6 @@ import lombok.Data;
 import notehospital.entity.Account;
 import notehospital.entity.Facility;
 
-import java.util.Set;
-
 @Data
 
 public class ServiceResponse {
@@ -15,5 +13,4 @@ public class ServiceResponse {
     String price;
     String description;
     private Facility facility;
-    private Set<Account> doctors;
 }
