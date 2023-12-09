@@ -50,8 +50,6 @@ public class AdminService {
     }
     public List<AccountResponseDTO> getAccountDoctor(){
         List<Account> accounts = accountRepository.findDoctors();
-//        List<Account> accounts = accountRepository.findAccountsByType(AccountType.DOCTOR);
-
         List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
         for(Account account: accounts){
             accountResponseDTOS.add(modelMapper.map(account, AccountResponseDTO.class));

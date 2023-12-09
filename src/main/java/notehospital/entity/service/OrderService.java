@@ -48,7 +48,6 @@ public class OrderService {
             result.setOrder(order);
             results.add(resultRepository.save(result));
         }
-
         order.setCreatedAt(new Date());
         order.setNote(orderRequest.getNote());
         order.setTestDate(orderRequest.getTestDate());
