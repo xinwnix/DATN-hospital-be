@@ -1,4 +1,4 @@
-package notehospital.entity.service;
+package notehospital.service;
 
 import notehospital.dto.EmailDetail;
 import notehospital.dto.request.*;
@@ -14,6 +14,7 @@ import notehospital.repository.AccountRepository;
 import notehospital.repository.FacilityRepository;
 import notehospital.repository.ServiceRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,6 +55,10 @@ public class AccountService implements UserDetailsService {
         Account account = modelMapper.map(accountRequestDTO, Account.class);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setCode(UUID.randomUUID().toString().replace("-", ""));
+        if(account.getType() == AccountType.DOCTOR){
+            Optional<notehospital.entity.Service> service = serviceRepository.findById(accountRequestDTO.getService_id());
+            account.setServiceac(service.get());
+        }
         Account newAccount = accountRepository.save(account);
         EmailDetail emailDetail = new EmailDetail();
         emailDetail.setPassword(accountRequestDTO.getPassword());
@@ -130,24 +135,19 @@ public class AccountService implements UserDetailsService {
         return facilities;
     }
 
-    //    public List<AccountResponseDTO> getDoctor(){
-//        List<Account> accounts = accountRepository.findAccountsByType(AccountType.DOCTOR);
-//        List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
-//        for(Account account: accounts){
-//            accountResponseDTOS.add(modelMapper.map(account, AccountResponseDTO.class));
-//        }
-//        return accountResponseDTOS;
-//    }
-
     public Map<String, Object> getServicesByFacilityId(Long facilityId) {
         Facility facility = facilityRepository.findById(facilityId).orElse(null);
         if (facility == null) {
         }
-
         // Truy vấn thông tin về dịch vụ từ cơ sở y tế dựa trên facilityId
         List<notehospital.entity.Service> services = serviceRepository.findServicesByFacilityId(facilityId);
         List<ServiceResponse> serviceDTOs = services.stream()
-                .map(service -> modelMapper.map(service, ServiceResponse.class))
+                .map(service ->{
+                    ServiceResponse serviceResponse =new ServiceResponse();
+                    BeanUtils.copyProperties(service,serviceResponse);
+                    serviceResponse.setFacility(service.getFacilitysv());
+                    return serviceResponse;
+                })
                 .collect(Collectors.toList());
 
         Map<String, Object> facilityAndServices = new HashMap<>();

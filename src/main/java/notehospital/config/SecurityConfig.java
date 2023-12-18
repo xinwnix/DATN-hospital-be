@@ -1,6 +1,6 @@
 package notehospital.config;
 
-import notehospital.entity.service.AccountService;
+import notehospital.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

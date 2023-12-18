@@ -1,22 +1,27 @@
-package notehospital.entity.service;
+package notehospital.service;
 
 import notehospital.dto.request.MedicineRequest;
 import notehospital.dto.request.ServiceRequest;
 import notehospital.dto.response.AccountResponseDTO;
+import notehospital.dto.response.ServiceDTO;
 import notehospital.dto.response.ServiceResponse;
 import notehospital.entity.Account;
+import notehospital.entity.Facility;
 import notehospital.entity.Medicine;
 import notehospital.enums.AccountType;
 import notehospital.repository.AccountRepository;
+import notehospital.repository.FacilityRepository;
 import notehospital.repository.MedicineRepository;
 import notehospital.repository.ServiceRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -26,6 +31,9 @@ public class AdminService {
 
     @Autowired
     ServiceRepository serviceRepository;
+
+    @Autowired
+    FacilityRepository facilityRepository;
 
     @Autowired
     MedicineRepository medicineRepository;
@@ -48,23 +56,48 @@ public class AdminService {
         }
         return accountResponseDTOS;
     }
+
     public List<AccountResponseDTO> getAccountDoctor(){
         List<Account> accounts = accountRepository.findDoctors();
         List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
+
         for(Account account: accounts){
-            accountResponseDTOS.add(modelMapper.map(account, AccountResponseDTO.class));
+            AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
+            BeanUtils.copyProperties(account, accountResponseDTO);
+            // Tạo một ServiceDTO từ Service
+            notehospital.entity.Service service = account.getServiceac();
+            ServiceDTO serviceDTO = new ServiceDTO();
+            if(service==null){
+                accountResponseDTO.setService(null);
+            }
+            if(service!=null){
+                serviceDTO.setId(service.getId());
+                serviceDTO.setImage(service.getImage());
+                serviceDTO.setName(service.getName());
+                serviceDTO.setPrice(service.getPrice());
+                serviceDTO.setDescription(service.getDescription());
+                accountResponseDTO.setService(serviceDTO); // Gán ServiceDTO vào AccountResponseDTO
+            }
+            accountResponseDTOS.add(accountResponseDTO);
         }
+
         return accountResponseDTOS;
     }
 
-
     public List<notehospital.entity.Service> getAllService(){
+        List<notehospital.entity.Service> services = serviceRepository.findAll();
+        return services;
+    }
+
+    public List<notehospital.entity.Service> getAllServiceWithFacility(){
         List<notehospital.entity.Service> services = serviceRepository.findAllServicesWithFacility();
         return services;
     }
 
     public notehospital.entity.Service createService(ServiceRequest serviceRequest){
         notehospital.entity.Service service = modelMapper.map(serviceRequest, notehospital.entity.Service.class);
+        Optional<Facility>  facility = facilityRepository.findById(serviceRequest.getFacilityac_id());
+        service.setFacilitysv(facility.get());
         return serviceRepository.save(service);
     }
 

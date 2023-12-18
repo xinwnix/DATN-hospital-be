@@ -19,7 +19,7 @@ import javax.persistence.*;
 public class Result {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
     private String comment;
@@ -34,6 +34,7 @@ public class Result {
     Order order;
 
     @ManyToOne()
-    @JoinColumn(name = "service_id")
+    @JsonIgnore
+    @JoinColumn(name =   "service_id")
     Service service;
 }

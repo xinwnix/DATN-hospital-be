@@ -26,8 +26,4 @@ public class Facility {
     @JsonIgnore
     private Set<Service> services;
 
-    @OneToMany(mappedBy = "facilityod", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Order> orders;
-
 }

@@ -9,9 +9,12 @@ import org.springframework.stereotype.Component;
 public class ResponseHandler<T> {
 
     public ResponseEntity response(int code, String message, T data){
-        if(data == null)
+        if(data == null) {
             return ResponseEntity.ok(new ResponseDTO(code, message));
-        return ResponseEntity.ok(new ResponseWithDataDTO<>(code, message, data));
+        }
+        else {
+            return ResponseEntity.ok(new ResponseWithDataDTO(code, message, data));
+        }
     }
 
 }

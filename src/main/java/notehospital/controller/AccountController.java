@@ -11,8 +11,8 @@ import notehospital.entity.Account;
 import notehospital.entity.Facility;
 import notehospital.enums.AccountStatus;
 import notehospital.exception.exception.BadRequest;
-import notehospital.entity.service.AccountService;
-import notehospital.entity.service.MedicineService;
+import notehospital.service.AccountService;
+import notehospital.service.MedicineService;
 import notehospital.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +77,13 @@ public class AccountController {
         return responseHandler.response(200, "Successfully active account!", accountResponseDTO);
     }
 
+    //cũ
+//    @GetMapping("/doctor")
+//    public ResponseEntity getDoctor(){
+//        List<AccountResponseDTO> doctors = accountService.getDoctor();
+//        return responseHandler.response(200,"Successfully get doctor account!",doctors);
+//    }
+
     @GetMapping("/facility-services/{facilityId}")
     public ResponseEntity<?> getFacilityServices(@PathVariable Long facilityId) {
         Map<String, Object> facilityAndServices = accountService.getServicesByFacilityId(facilityId);
@@ -88,7 +95,6 @@ public class AccountController {
         List<AccountResponseDTO> doctors = accountService.getDoctorsByServiceId(serviceId);
         return responseHandler.response(200, "Successfully get doctors by service ID!", doctors);
     }
-
 
     @GetMapping("/facility")
     public ResponseEntity<?> getFacility() {

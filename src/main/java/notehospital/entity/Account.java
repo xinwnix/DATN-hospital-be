@@ -49,17 +49,17 @@ public class Account implements UserDetails {
     private AccountType type;
 
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Order> history;
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Order> doctorSchedule;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id")
-    @JsonProperty("service")
+    @JsonIgnore
     private Service serviceac;
 
     @Override

@@ -9,6 +9,7 @@ public class OrderRequest {
     Date testDate;
     long doctorId;
     long[] services;
+    long facilityod_id;
     String note;
     long patientId;
 }

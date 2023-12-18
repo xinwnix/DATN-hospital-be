@@ -38,7 +38,7 @@ public class Service {
     @JsonIgnore
     private Set<Account> accounts;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "facilityac_id")
     @JsonProperty("facility")
     private Facility facilitysv;

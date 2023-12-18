@@ -6,8 +6,8 @@ import notehospital.dto.request.ServiceRequest;
 import notehospital.dto.response.AccountResponseDTO;
 import notehospital.entity.Medicine;
 import notehospital.entity.Service;
-import notehospital.entity.service.AdminService;
-import notehospital.entity.service.MedicineService;
+import notehospital.service.AdminService;
+import notehospital.service.MedicineService;
 import notehospital.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +49,12 @@ public class AdminController {
     @GetMapping("/service")
     public ResponseEntity getAllService() {
         List<Service> accountResponseDTOList = adminService.getAllService();
+        return responseHandler.response(200, "Successfully get all service!", accountResponseDTOList);
+    }
+
+    @GetMapping("/service/facility")
+    public ResponseEntity getAllServiceWithFacility() {
+        List<Service> accountResponseDTOList = adminService.getAllServiceWithFacility();
         return responseHandler.response(200, "Successfully get all service!", accountResponseDTOList);
     }
 

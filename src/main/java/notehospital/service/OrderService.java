@@ -1,18 +1,18 @@
-package notehospital.entity.service;
+package notehospital.service;
 
 import notehospital.dto.request.CreatePrescriptionRequest;
 import notehospital.dto.request.OrderRequest;
 import notehospital.dto.request.PrescriptionItemRequest;
 import notehospital.dto.request.ResultRequest;
 import notehospital.entity.*;
-import notehospital.enums.AccountStatus;
 import notehospital.enums.OrderStatus;
 import notehospital.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -30,12 +30,17 @@ public class OrderService {
     OrderRepository orderRepository;
 
     @Autowired
+    PrescriptionRepository prescriptionRepository;
+    @Autowired
     PrescriptionItemRepository prescriptionItemRepository;
 
     @Autowired
     MedicineRepository medicineRepository;
 
-    public Order createOrder(OrderRequest orderRequest) {
+    @Autowired
+    FacilityRepository facilityRepository;
+
+    public Order createOrder(OrderRequest orderRequest) throws ParseException {
         Order neworder = new Order();
         Order order = orderRepository.save(neworder);
         Set<Result> results = new HashSet<>();
@@ -54,7 +59,8 @@ public class OrderService {
         order.setPatient(patient);
         order.setDoctor(doctor);
         order.setResults(results);
-        return orderRepository.save(order);
+        orderRepository.save(order);
+        return null;
     }
 
     public void deleteOrderById(Long orderId) {
@@ -95,22 +101,22 @@ public class OrderService {
     public Order createPrescription(long orderId, CreatePrescriptionRequest createPrescriptionRequest) {
         Order order = orderRepository.findOrderById(orderId);
 
-//        if(order.getPrescription() == null){
-//            Prescription prescription = new Prescription();
-////            prescription.setOrder(order);
-//            prescription = prescriptionRepository.save(prescription);
-//            order.setPrescription(prescription);
-//            order = orderRepository.save(order);
-//        }
+        if(order.getPrescription() == null){
+            Prescription prescription = new Prescription();
+            prescription.setOrder(order);
+            prescription = prescriptionRepository.save(prescription);
+            order.setPrescription(prescription);
+            order = orderRepository.save(order);
+        }
 
-//        if (order.getPrescription() != null && order.getPrescription().getPrescriptionItems() != null &&
-//                order.getPrescription().getPrescriptionItems().size() > 0
-//        ) {
-//            for(PrescriptionItem prescriptionItem: order.getPrescription().getPrescriptionItems()){
-//                prescriptionItem.setDeleted(true);
-//                prescriptionItemRepository.save(prescriptionItem);
-//            }
-//        }
+        if (order.getPrescription() != null && order.getPrescription().getPrescriptionItems() != null &&
+                order.getPrescription().getPrescriptionItems().size() > 0
+        ) {
+            for(PrescriptionItem prescriptionItem: order.getPrescription().getPrescriptionItems()){
+                prescriptionItem.setDeleted(true);
+                prescriptionItemRepository.save(prescriptionItem);
+            }
+        }
 
         for (PrescriptionItemRequest prescriptionItem : createPrescriptionRequest.getPrescriptionItems()) {
             Medicine medicine = medicineRepository.findMedicineById(prescriptionItem.getMedicineId());
@@ -118,9 +124,10 @@ public class OrderService {
             newItem.setTimes(prescriptionItem.getTimes());
             newItem.setQuantity(prescriptionItem.getQuantity());
             newItem.setMedicine(medicine);
-            newItem.setOrder(order);
+            newItem.setPrescription(order.getPrescription());
             prescriptionItemRepository.save(newItem);
         }
+
         Order newOrder = orderRepository.findOrderById(orderId);
         return newOrder;
     }

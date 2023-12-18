@@ -2,10 +2,14 @@ package notehospital.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
+import javax.persistence.criteria.Fetch;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import notehospital.enums.OrderStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -33,20 +37,18 @@ public class Order {
     @JoinColumn(name = "account_id")
     private Account patient;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "doctor_id")
     private Account doctor;
 
-    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "prescription_id")
+    private Prescription prescription;
+
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<PrescriptionItem> prescriptionItems;
-
-
-    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Result> results;
 
-    @ManyToOne()
-    @JoinColumn(name = "facilityod_id")
-    @JsonIgnore
-    Facility facilityod;
 }

@@ -3,6 +3,8 @@ package notehospital.dto.response;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import notehospital.entity.Service;
 import notehospital.enums.AccountStatus;
 import notehospital.enums.AccountType;
@@ -11,6 +13,8 @@ import notehospital.enums.Gender;
 import java.time.LocalDate;
 
 @Data
+@Setter
+@Getter
 public class AccountResponseDTO {
     private long id;
     private String phone;
@@ -26,5 +30,6 @@ public class AccountResponseDTO {
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
-    private notehospital.entity.Service service;
+    private ServiceDTO service;
+
 }

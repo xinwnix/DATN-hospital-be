@@ -1,5 +1,6 @@
 package notehospital.repository;
 
+import notehospital.entity.Account;
 import notehospital.entity.Facility;
 import org.springframework.data.jpa.repository.JpaRepository;
 

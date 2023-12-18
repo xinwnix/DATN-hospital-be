@@ -1,24 +1,29 @@
 package notehospital.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import notehospital.Mapping.OrderMapping;
 import notehospital.dto.request.CreatePrescriptionRequest;
 import notehospital.dto.request.OrderRequest;
 import notehospital.dto.request.ResultRequest;
+import notehospital.dto.response.OrderResponse;
 import notehospital.entity.Order;
 //import notehospital.entity.Prescription;
 import notehospital.entity.Result;
 import notehospital.enums.OrderStatus;
-import notehospital.entity.service.OrderService;
+import notehospital.service.OrderService;
 import notehospital.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @SecurityRequirement(name = "api")
-@CrossOrigin(origins = "https://hospital-be.vercel.app/")
+@CrossOrigin("*")
 public class OrderController {
 
     @Autowired
@@ -27,7 +32,7 @@ public class OrderController {
     ResponseHandler responseHandler;
 
     @PostMapping("order")
-    public ResponseEntity createOrder(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity createOrder(@RequestBody OrderRequest orderRequest) throws ParseException {
         Order order = orderService.createOrder(orderRequest);
         return responseHandler.response(201, "Successfully create new order!", order);
     }
@@ -41,19 +46,22 @@ public class OrderController {
     @GetMapping("order")
     public ResponseEntity getOrder() {
         List<Order> order = orderService.getOrder();
-        return responseHandler.response(201, "Successfully create new order!", order);
+        List<OrderResponse>orderResponse=order.stream().map(OrderMapping::MapEntitytoResponse).collect(Collectors.toList());
+        return responseHandler.response(201, "Successfully create new order!", orderResponse);
     }
 
     @GetMapping("order/{userId}")
-    public ResponseEntity getOrderHistory(@PathVariable long userId) {
+    public ResponseEntity getOrderHistory(@PathVariable long userId){
         List<Order> orders = orderService.getOrderHistory(userId);
-        return responseHandler.response(200, "Successfully get history order!", orders);
+        List<OrderResponse>orderResponse=orders.stream().map(OrderMapping::MapEntitytoResponse).collect(Collectors.toList());
+        return responseHandler.response(200,"Successfully get history order!", orderResponse);
     }
 
     @GetMapping("order-detail/{orderId}")
     public ResponseEntity getOrderDetail(@PathVariable long orderId) {
         Order orders = orderService.getOrderDetail(orderId);
-        return responseHandler.response(200, "Successfully get order detail!", orders);
+        OrderResponse orderResponse = OrderMapping.MapEntitytoResponse(orders);
+        return responseHandler.response(200, "Successfully get order detail!", orderResponse);
     }
 
     @GetMapping("schedule/{userId}")
