@@ -24,9 +24,6 @@ public class Prescription {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
-
-    private String note;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     @JsonIgnore

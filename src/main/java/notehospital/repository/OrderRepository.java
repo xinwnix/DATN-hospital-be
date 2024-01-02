@@ -12,6 +12,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findOrdersByPatient(Account patient);
 
+    List<Order> findOrdersByStatus(OrderStatus status); //mới
     List<Order> findOrdersByDoctorAndStatus(Account doctor, OrderStatus orderStatus);
 
     Order findOrderById(long orderId);

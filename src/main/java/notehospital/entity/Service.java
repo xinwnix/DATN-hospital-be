@@ -27,10 +27,10 @@ public class Service {
     @Lob
     private String image;
     private String name;
-    private String price;
+    private Double price;
     private String description;
 
-    @OneToMany(mappedBy = "service",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "service", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Result> results;
 
@@ -38,8 +38,9 @@ public class Service {
     @JsonIgnore
     private Set<Account> accounts;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "facilityac_id")
     @JsonProperty("facility")
     private Facility facilitysv;
+
 }

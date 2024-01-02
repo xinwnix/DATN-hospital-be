@@ -15,9 +15,9 @@ public class OrderMapping {
        orderResponse.setId(order.getId());
        orderResponse.setCreatedAt(order.getCreatedAt());
        orderResponse.setNote(order.getNote());
-       orderResponse.setConclude(order.getConclude());
        orderResponse.setTestDate(order.getTestDate());
        orderResponse.setStatus(order.getStatus());
+
        orderResponse.setDoctor(AccountMapping.accountResponseDTO(order.getDoctor()));
        orderResponse.setPatient(AccountMapping.accountResponseDTO(order.getPatient()));
 

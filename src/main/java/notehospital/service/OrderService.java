@@ -8,6 +8,7 @@ import notehospital.entity.*;
 import notehospital.enums.OrderStatus;
 import notehospital.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -76,14 +77,22 @@ public class OrderService {
         return orders;
     }
 
+
     public Order getOrderDetail(long orderId) {
         Order order = orderRepository.findOrderById(orderId);
         return order;
     }
 
     public List<Order> getOrder() {
-        List<Order> orders = orderRepository.findAll();//findAllConfirm
+        Sort sortByDescendingId = Sort.by(Sort.Direction.DESC, "id");
+        List<Order> orders = orderRepository.findAll(sortByDescendingId);
         return orders;
+    }
+
+
+    //Mới
+    public List<Order> getOrdersWithStatusDone() {
+        return orderRepository.findOrdersByStatus(OrderStatus.DONE); // Truyền trực tiếp enum OrderStatus.DONE
     }
 
     public Order updateStatusOrder(long orderId, OrderStatus accountStatus) {
@@ -101,7 +110,7 @@ public class OrderService {
     public Order createPrescription(long orderId, CreatePrescriptionRequest createPrescriptionRequest) {
         Order order = orderRepository.findOrderById(orderId);
 
-        if(order.getPrescription() == null){
+        if (order.getPrescription() == null) {
             Prescription prescription = new Prescription();
             prescription.setOrder(order);
             prescription = prescriptionRepository.save(prescription);
@@ -112,7 +121,7 @@ public class OrderService {
         if (order.getPrescription() != null && order.getPrescription().getPrescriptionItems() != null &&
                 order.getPrescription().getPrescriptionItems().size() > 0
         ) {
-            for(PrescriptionItem prescriptionItem: order.getPrescription().getPrescriptionItems()){
+            for (PrescriptionItem prescriptionItem : order.getPrescription().getPrescriptionItems()) {
                 prescriptionItem.setDeleted(true);
                 prescriptionItemRepository.save(prescriptionItem);
             }

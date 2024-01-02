@@ -21,8 +21,9 @@ public class Medicine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
-
     private String name;
+    private String barcode;
+    private String describemedicine;
 
     @OneToMany(mappedBy = "medicine",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore

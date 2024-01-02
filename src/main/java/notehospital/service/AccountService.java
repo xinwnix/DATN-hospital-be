@@ -1,13 +1,16 @@
 package notehospital.service;
 
+import notehospital.Mapping.AccountMapping;
 import notehospital.dto.EmailDetail;
 import notehospital.dto.request.*;
 import notehospital.dto.response.AccountResponseDTO;
 import notehospital.dto.response.ServiceResponse;
 import notehospital.entity.Account;
 import notehospital.entity.Facility;
+import notehospital.entity.Order;
 import notehospital.enums.AccountStatus;
 import notehospital.enums.AccountType;
+import notehospital.enums.OrderStatus;
 import notehospital.exception.exception.BadRequest;
 import notehospital.exception.exception.EntityNotFound;
 import notehospital.repository.AccountRepository;
@@ -103,8 +106,9 @@ public class AccountService implements UserDetailsService {
 
     public AccountResponseDTO getAccountById(long id) {
         Account account = accountRepository.findAccountById(id);
-        return modelMapper.map(account, AccountResponseDTO.class);
+        return AccountMapping.accountResponseDTO(account);
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

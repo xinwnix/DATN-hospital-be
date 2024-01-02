@@ -10,8 +10,9 @@ public class ServiceMapping {
         ServiceDTO serviceDTO = new ServiceDTO();
         serviceDTO.setImage(service.getImage());
         serviceDTO.setName(service.getName());
-        serviceDTO.setPrice(serviceDTO.getPrice());
-        serviceDTO.setDescription(serviceDTO.getDescription());
+        serviceDTO.setPrice(service.getPrice());
+        serviceDTO.setDescription(service.getDescription());
+        serviceDTO.setFacility(FacilityMapping.MapEntityToResponse(service.getFacilitysv()));
         return serviceDTO;
 
     }

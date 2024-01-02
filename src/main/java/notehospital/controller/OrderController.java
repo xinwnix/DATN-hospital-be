@@ -2,13 +2,13 @@ package notehospital.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import notehospital.Mapping.OrderMapping;
+import notehospital.Mapping.ResultMapping;
 import notehospital.dto.request.CreatePrescriptionRequest;
 import notehospital.dto.request.OrderRequest;
 import notehospital.dto.request.ResultRequest;
 import notehospital.dto.response.OrderResponse;
+import notehospital.dto.response.ResultResponse;
 import notehospital.entity.Order;
-//import notehospital.entity.Prescription;
-import notehospital.entity.Result;
 import notehospital.enums.OrderStatus;
 import notehospital.service.OrderService;
 import notehospital.utils.ResponseHandler;
@@ -34,64 +34,77 @@ public class OrderController {
     @PostMapping("order")
     public ResponseEntity createOrder(@RequestBody OrderRequest orderRequest) throws ParseException {
         Order order = orderService.createOrder(orderRequest);
-        return responseHandler.response(201, "Successfully create new order!", order);
+        return responseHandler.response(201, "Tạo lịch khám mới thành công!", order);
     }
 
     @DeleteMapping("order/{orderId}")
     public ResponseEntity deleteOrder(@PathVariable Long orderId) {
-        orderService.deleteOrderById(orderId); // Gọi phương thức xóa đơn hàng theo id trong orderService của bạn
-        return responseHandler.response(200, "Successfully deleted order with id " + orderId, null);
+        orderService.deleteOrderById(orderId);
+        return responseHandler.response(200, "Đã xóa thành công lịch khám " + orderId, null);
     }
 
     @GetMapping("order")
     public ResponseEntity getOrder() {
         List<Order> order = orderService.getOrder();
         List<OrderResponse>orderResponse=order.stream().map(OrderMapping::MapEntitytoResponse).collect(Collectors.toList());
-        return responseHandler.response(201, "Successfully create new order!", orderResponse);
+        return responseHandler.response(201, "Xem thành công!", orderResponse);
+    }
+
+    //Mới
+    @GetMapping("orderDone")
+    public ResponseEntity<?> getOrderWithStatusDone() {
+        List<Order> orders = orderService.getOrdersWithStatusDone();
+        List<OrderResponse> orderResponses = orders.stream().map(order -> {
+            OrderResponse response = OrderMapping.MapEntitytoResponse(order);
+            response.setStatus(order.getStatus()); // Đã được gán trạng thái từ đối tượng Order, không cần thiết lập lại
+            return response;
+        }).collect(Collectors.toList());
+        return responseHandler.response(200, "Xem thành công!", orderResponses); // Sử dụng mã status 200
     }
 
     @GetMapping("order/{userId}")
     public ResponseEntity getOrderHistory(@PathVariable long userId){
         List<Order> orders = orderService.getOrderHistory(userId);
         List<OrderResponse>orderResponse=orders.stream().map(OrderMapping::MapEntitytoResponse).collect(Collectors.toList());
-        return responseHandler.response(200,"Successfully get history order!", orderResponse);
+        return responseHandler.response(200,"Xem thành công!", orderResponse);
     }
 
     @GetMapping("order-detail/{orderId}")
     public ResponseEntity getOrderDetail(@PathVariable long orderId) {
         Order orders = orderService.getOrderDetail(orderId);
         OrderResponse orderResponse = OrderMapping.MapEntitytoResponse(orders);
-        return responseHandler.response(200, "Successfully get order detail!", orderResponse);
+        return responseHandler.response(200, "Xem thành công!", orderResponse);
     }
 
     @GetMapping("schedule/{userId}")
     public ResponseEntity getSchedule(@PathVariable long userId) {
         List<Order> orders = orderService.getDoctorSchedule(userId);
-        return responseHandler.response(200, "Successfully get schedule!", orders);
+        return responseHandler.response(200, "Xem thành công!", orders);
     }
 
     @PatchMapping("order/{orderId}/{status}")
     public ResponseEntity updateStatusOrder(@PathVariable long orderId, @PathVariable OrderStatus status) {
         Order orders = orderService.updateStatusOrder(orderId, status);
-        return responseHandler.response(200, "Successfully update order status!", orders);
+        OrderResponse orderResponse = OrderMapping.MapEntitytoResponse(orders);
+        return responseHandler.response(200, "Successfully update order status!", orderResponse);
     }
 
     @PostMapping("/prescription/{orderId}")
     public ResponseEntity createPrescription(@PathVariable long orderId, @RequestBody CreatePrescriptionRequest createPrescriptionRequest){
         Order order = orderService.createPrescription(orderId, createPrescriptionRequest);
-        return responseHandler.response(200,"Successfully create prescription!", order);
+        return responseHandler.response(200,"Tạo mới đơn thuốc thành công!", order);
     }
 
     @PostMapping("/result/{orderId}")
     public ResponseEntity createResult(@PathVariable long orderId, @RequestBody List<ResultRequest> resultRequests) {
         Order order = orderService.createResult(orderId, resultRequests);
-        return responseHandler.response(200, "Successfully create result!", order);
+        return responseHandler.response(200, "Tạo mới kết quả thành công!", order);
     }
 
     @GetMapping("/health-record/{userId}")
     public ResponseEntity getHealthRecord(@PathVariable long userId) {
-        List<Result> results = orderService.getHealthRecord(userId);
-        return responseHandler.response(200, "Successfully get health record!", results);
+        List<ResultResponse> results = orderService.getHealthRecord(userId).stream().map(ResultMapping::MapEntityToResponse).collect(Collectors.toList());
+        return responseHandler.response(200, "Xem thành công!", results);
     }
 
 

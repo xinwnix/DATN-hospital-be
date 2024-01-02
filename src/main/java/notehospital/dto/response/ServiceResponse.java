@@ -1,23 +1,23 @@
 package notehospital.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import notehospital.entity.Account;
 import notehospital.entity.Facility;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class ServiceResponse {
     long id;
     String image;
     String name;
-    String price;
+    Double price;
     String description;
     private Facility facility;
 
-    public ServiceResponse(long id, String image, String name, String price, String description) {
+    public ServiceResponse(long id, String image, String name, Double price, String description) {
         this.id = id;
         this.image = image;
         this.name = name;

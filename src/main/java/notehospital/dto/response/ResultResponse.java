@@ -15,5 +15,5 @@ public class ResultResponse {
     String comment;
     String value;
     ResultLevel level;
-    private ServiceDTO service;
+    private OrdertoPrescriptionResponse ordertoPrescription;
 }

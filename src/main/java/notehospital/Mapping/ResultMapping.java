@@ -10,7 +10,7 @@ public class ResultMapping {
         resultResponse.setComment(result.getComment());
         resultResponse.setValue(result.getValue());
         resultResponse.setLevel(result.getLevel());
-        resultResponse.setService(ServiceMapping.MapEntityToResponse(result.getService()));
+        resultResponse.setOrdertoPrescription(OrdertoPrescriptionMapping.MapEntitytoResponse(result.getOrder()));
         return resultResponse;
     }
 }

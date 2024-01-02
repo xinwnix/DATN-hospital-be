@@ -6,4 +6,6 @@ import lombok.Data;
 public class MedicineRequest {
     long id;
     String name;
+    String barcode;
+    String describemedicine;
 }

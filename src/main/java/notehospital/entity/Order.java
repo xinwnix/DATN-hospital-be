@@ -27,7 +27,6 @@ public class Order {
 
     private Date createdAt;
     private String note;
-    private String conclude;
     private Date testDate;
 
     @Enumerated(EnumType.STRING)

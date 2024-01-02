@@ -16,14 +16,11 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class OrderResponse {
+public class OrdertoPrescriptionResponse {
     long id;
     Date createdAt;
     String note;
     Date testDate;
-    OrderStatus status;
     AccountResponseDTO doctor;
-    AccountResponseDTO patient;
     Prescription prescription;
-    Set<ResultResponse> results;
 }

@@ -1,8 +1,10 @@
 package notehospital.service;
 
+import notehospital.dto.request.FacilityRequest;
 import notehospital.dto.request.MedicineRequest;
 import notehospital.dto.request.ServiceRequest;
 import notehospital.dto.response.AccountResponseDTO;
+import notehospital.dto.response.FacilityResponse;
 import notehospital.dto.response.ServiceDTO;
 import notehospital.dto.response.ServiceResponse;
 import notehospital.entity.Account;
@@ -30,7 +32,7 @@ public class AdminService {
     AccountRepository accountRepository;
 
     @Autowired
-    ServiceRepository serviceRepository;
+    ServiceRepository   serviceRepository;
 
     @Autowired
     FacilityRepository facilityRepository;
@@ -77,6 +79,11 @@ public class AdminService {
                 serviceDTO.setPrice(service.getPrice());
                 serviceDTO.setDescription(service.getDescription());
                 accountResponseDTO.setService(serviceDTO); // Gán ServiceDTO vào AccountResponseDTO
+
+                Facility facility = account.getServiceac().getFacilitysv(); // Đây là ví dụ, bạn cần sử dụng phương thức thích hợp để lấy dữ liệu Facility từ Service
+                FacilityResponse facilityResponse = new FacilityResponse();
+                facilityResponse.setFacility_name(facility.getFacility_name());
+                serviceDTO.setFacility(facilityResponse);
             }
             accountResponseDTOS.add(accountResponseDTO);
         }
@@ -85,7 +92,7 @@ public class AdminService {
     }
 
     public List<notehospital.entity.Service> getAllService(){
-        List<notehospital.entity.Service> services = serviceRepository.findAll();
+        List<notehospital.entity.Service> services = serviceRepository.findAllServicesWithFacility();
         return services;
     }
 
@@ -103,6 +110,11 @@ public class AdminService {
 
     public void deleteService(long serviceId){
         serviceRepository.deleteById(serviceId);
+    }
+
+    public Facility createFacility(FacilityRequest facilityRequest){
+        Facility facility = modelMapper.map(facilityRequest, Facility.class);
+        return facilityRepository.save(facility);
     }
 
     public Medicine createMedicine(MedicineRequest medicineRequest){
