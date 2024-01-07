@@ -15,9 +15,9 @@ public class AccountMapping {
         accountResponseDTO.setGender(account.getGender());
         accountResponseDTO.setAddress(account.getAddress());
         accountResponseDTO.setDateOfBirth(account.getDateOfBirth());
+        accountResponseDTO.setAccountType(account.getType());
         if(account.getType() == AccountType.DOCTOR){
             accountResponseDTO.setService(ServiceMapping.MapEntityToResponse(account.getServiceac()));
-
         }
         return accountResponseDTO;
     }

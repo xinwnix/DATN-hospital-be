@@ -65,6 +65,7 @@ public class AdminService {
 
         for(Account account: accounts){
             AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
+            accountResponseDTO.setAccountType(account.getType());
             BeanUtils.copyProperties(account, accountResponseDTO);
             // Tạo một ServiceDTO từ Service
             notehospital.entity.Service service = account.getServiceac();
@@ -86,6 +87,7 @@ public class AdminService {
                 serviceDTO.setFacility(facilityResponse);
             }
             accountResponseDTOS.add(accountResponseDTO);
+
         }
 
         return accountResponseDTOS;

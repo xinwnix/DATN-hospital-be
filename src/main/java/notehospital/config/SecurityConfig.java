@@ -54,9 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest().permitAll()
                 .and().csrf().disable();
-//                .exceptionHandling().authenticationEntryPoint(authenExceptionHandler)
-//                .and()
-//                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
     }
 
