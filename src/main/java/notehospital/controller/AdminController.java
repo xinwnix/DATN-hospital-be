@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -50,6 +51,12 @@ public class AdminController {
     @GetMapping("/accounts/patient")
     public ResponseEntity getAccountPatient() {
         List<AccountResponseDTO> accountResponseDTOList = adminService.getAccountPatient();
+        return responseHandler.response(200, "Xem thành công!", accountResponseDTOList);
+    }
+
+    @GetMapping("/patientrecord")
+    public ResponseEntity getAccountPatienRecordt() {
+        Set<AccountResponseDTO> accountResponseDTOList = adminService.getAccountPatientWithDoneOrders();
         return responseHandler.response(200, "Xem thành công!", accountResponseDTOList);
     }
 

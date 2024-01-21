@@ -1,29 +1,23 @@
 package notehospital.service;
 
+import notehospital.Mapping.OrderMapping;
 import notehospital.dto.request.FacilityRequest;
 import notehospital.dto.request.MedicineRequest;
 import notehospital.dto.request.ServiceRequest;
-import notehospital.dto.response.AccountResponseDTO;
-import notehospital.dto.response.FacilityResponse;
-import notehospital.dto.response.ServiceDTO;
-import notehospital.dto.response.ServiceResponse;
+import notehospital.dto.response.*;
 import notehospital.entity.Account;
 import notehospital.entity.Facility;
 import notehospital.entity.Medicine;
+import notehospital.entity.Order;
 import notehospital.enums.AccountType;
-import notehospital.repository.AccountRepository;
-import notehospital.repository.FacilityRepository;
-import notehospital.repository.MedicineRepository;
-import notehospital.repository.ServiceRepository;
+import notehospital.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -40,6 +34,9 @@ public class AdminService {
     @Autowired
     MedicineRepository medicineRepository;
 
+    @Autowired
+    OrderRepository orderRepository;
+
     public List<AccountResponseDTO> getAllAccount(){
         List<Account> accounts = accountRepository.findAll();
         List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
@@ -55,6 +52,27 @@ public class AdminService {
         List<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
         for(Account account: accounts){
             accountResponseDTOS.add(modelMapper.map(account, AccountResponseDTO.class));
+        }
+        return accountResponseDTOS;
+    }
+
+
+    public Set<AccountResponseDTO> getAccountPatientWithDoneOrders() {
+        List<Account> accounts = accountRepository.findPatientsWithDoneOrders();
+        List<Account> sortedAccounts = accounts.stream()
+                .sorted(Comparator.comparingLong(Account::getId))
+                .collect(Collectors.toList());
+        Set<AccountResponseDTO> accountResponseDTOS = new HashSet<>();
+        for (Account account : sortedAccounts) {
+            List<Order> doneOrders = orderRepository.findDoneOrdersByPatient(account.getId());
+            if (!doneOrders.isEmpty()) {
+                AccountResponseDTO accountResponseDTO = modelMapper.map(account, AccountResponseDTO.class);
+                Set<OrderResponse> orderResponseDTOS = doneOrders.stream()
+                        .map(OrderMapping::MapEntitytoResponse)
+                        .collect(Collectors.toSet());
+                accountResponseDTO.setOrderResponses(orderResponseDTOS);
+                accountResponseDTOS.add(accountResponseDTO);
+            }
         }
         return accountResponseDTOS;
     }

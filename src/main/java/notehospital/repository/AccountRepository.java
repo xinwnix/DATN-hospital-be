@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.criteria.Order;
 import java.util.List;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
@@ -27,4 +28,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findDoctors();
 
     List<Account> findAccountsByType(AccountType accountType  );
+
+    @Query("SELECT DISTINCT o.patient FROM Order o WHERE o.status = notehospital.enums.OrderStatus.DONE")
+    List<Account> findPatientsWithDoneOrders();
+
 }

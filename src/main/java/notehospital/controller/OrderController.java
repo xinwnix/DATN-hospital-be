@@ -6,10 +6,12 @@ import notehospital.Mapping.ResultMapping;
 import notehospital.dto.request.CreatePrescriptionRequest;
 import notehospital.dto.request.OrderRequest;
 import notehospital.dto.request.ResultRequest;
+import notehospital.dto.response.AccountResponseDTO;
 import notehospital.dto.response.OrderResponse;
 import notehospital.dto.response.ResultResponse;
 import notehospital.entity.Order;
 import notehospital.enums.OrderStatus;
+import notehospital.service.AdminService;
 import notehospital.service.OrderService;
 import notehospital.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,17 +51,15 @@ public class OrderController {
         List<OrderResponse>orderResponse=order.stream().map(OrderMapping::MapEntitytoResponse).collect(Collectors.toList());
         return responseHandler.response(201, "Xem thành công!", orderResponse);
     }
-
-    //Mới
     @GetMapping("orderDone")
     public ResponseEntity<?> getOrderWithStatusDone() {
         List<Order> orders = orderService.getOrdersWithStatusDone();
         List<OrderResponse> orderResponses = orders.stream().map(order -> {
             OrderResponse response = OrderMapping.MapEntitytoResponse(order);
-            response.setStatus(order.getStatus()); // Đã được gán trạng thái từ đối tượng Order, không cần thiết lập lại
+            response.setStatus(order.getStatus());
             return response;
         }).collect(Collectors.toList());
-        return responseHandler.response(200, "Xem thành công!", orderResponses); // Sử dụng mã status 200
+        return responseHandler.response(200, "Xem thành công!", orderResponses);
     }
 
     @GetMapping("order/{userId}")
@@ -86,7 +86,7 @@ public class OrderController {
     public ResponseEntity updateStatusOrder(@PathVariable long orderId, @PathVariable OrderStatus status) {
         Order orders = orderService.updateStatusOrder(orderId, status);
         OrderResponse orderResponse = OrderMapping.MapEntitytoResponse(orders);
-        return responseHandler.response(200, "Successfully update order status!", orderResponse);
+        return responseHandler.response(200, "Duyệt yêu cầu thành công!", orderResponse);
     }
 
     @PostMapping("/prescription/{orderId}")
@@ -106,6 +106,4 @@ public class OrderController {
         List<ResultResponse> results = orderService.getHealthRecord(userId).stream().map(ResultMapping::MapEntityToResponse).collect(Collectors.toList());
         return responseHandler.response(200, "Xem thành công!", results);
     }
-
-
 }

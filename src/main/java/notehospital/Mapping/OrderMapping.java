@@ -17,7 +17,6 @@ public class OrderMapping {
        orderResponse.setNote(order.getNote());
        orderResponse.setTestDate(order.getTestDate());
        orderResponse.setStatus(order.getStatus());
-
        orderResponse.setDoctor(AccountMapping.accountResponseDTO(order.getDoctor()));
        orderResponse.setPatient(AccountMapping.accountResponseDTO(order.getPatient()));
 

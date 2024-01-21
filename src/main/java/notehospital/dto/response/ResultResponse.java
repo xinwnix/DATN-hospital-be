@@ -16,4 +16,5 @@ public class ResultResponse {
     String value;
     ResultLevel level;
     private OrdertoPrescriptionResponse ordertoPrescription;
+
 }

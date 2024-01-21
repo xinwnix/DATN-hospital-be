@@ -89,10 +89,8 @@ public class OrderService {
         return orders;
     }
 
-
-    //Mới
     public List<Order> getOrdersWithStatusDone() {
-        return orderRepository.findOrdersByStatus(OrderStatus.DONE); // Truyền trực tiếp enum OrderStatus.DONE
+        return orderRepository.findOrdersByStatus(OrderStatus.DONE);
     }
 
     public Order updateStatusOrder(long orderId, OrderStatus accountStatus) {
@@ -156,6 +154,5 @@ public class OrderService {
         List<Result> results = resultRepository.getHealthRecord(userId);
         return results;
     }
-
 
 }

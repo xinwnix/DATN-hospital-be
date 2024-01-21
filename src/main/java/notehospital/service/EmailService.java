@@ -22,15 +22,15 @@ public class EmailService {
             Context context = new Context();
 
             context.setVariable("name", emailDetail.getName());
-            context.setVariable("dynamicUrl", "https://hospital-be.vercel.app/"+emailDetail.getCode());
+            context.setVariable("dynamicUrl", "https://hospital-be.app/"+emailDetail.getCode());
             context.setVariable("password", emailDetail.getPassword());
             String text = templateEngine.process("emailtemplate", context);
 
-            // Creating a simple mail message
+
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
-            // Setting up necessary details
+
             mimeMessageHelper.setFrom("admin@gmail.com");
             mimeMessageHelper.setTo(emailDetail.getRecipient());
             mimeMessageHelper.setText(text, true);

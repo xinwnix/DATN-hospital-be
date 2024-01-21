@@ -11,6 +11,7 @@ import notehospital.enums.AccountType;
 import notehospital.enums.Gender;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Setter
@@ -31,5 +32,7 @@ public class AccountResponseDTO {
     private AccountStatus accountStatus;
 
     private ServiceDTO service;
+
+    Set<OrderResponse> orderResponses;
 
 }

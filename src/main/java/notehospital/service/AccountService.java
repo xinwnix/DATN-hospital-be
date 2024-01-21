@@ -59,22 +59,17 @@ public class AccountService implements UserDetailsService {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setCode(UUID.randomUUID().toString().replace("-", ""));
         if(account.getType() == AccountType.DOCTOR){
+            String defaultPassword = "123456";
+            account.setPassword(passwordEncoder.encode(defaultPassword));
             Optional<notehospital.entity.Service> service = serviceRepository.findById(accountRequestDTO.getService_id());
             account.setServiceac(service.get());
+            account.setAccountStatus(AccountStatus.ACTIVE);
         }
         Account newAccount = accountRepository.save(account);
-        EmailDetail emailDetail = new EmailDetail();
-        emailDetail.setPassword(accountRequestDTO.getPassword());
-        emailDetail.setName(account.getFullName());
-        emailDetail.setRecipient(account.getEmail());
-        emailDetail.setSubject("Xác nhận tài khoản");
-        emailDetail.setMsgBody("aaa");
-        emailDetail.setCode(account.getId() + "/" + account.getCode());
-        emailService.sendMailTemplate(emailDetail);
         return modelMapper.map(newAccount, AccountResponseDTO.class);
     }
 
-    public AccountResponseDTO login(LoginRequestDTO loginRequestDTO) {
+    public AccountResponseDTO  login(LoginRequestDTO loginRequestDTO) {
         Authentication authentication = null;
 
         try {
@@ -143,7 +138,6 @@ public class AccountService implements UserDetailsService {
         Facility facility = facilityRepository.findById(facilityId).orElse(null);
         if (facility == null) {
         }
-        // Truy vấn thông tin về dịch vụ từ cơ sở y tế dựa trên facilityId
         List<notehospital.entity.Service> services = serviceRepository.findServicesByFacilityId(facilityId);
         List<ServiceResponse> serviceDTOs = services.stream()
                 .map(service ->{
